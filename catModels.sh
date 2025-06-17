@@ -1,1 +1,1 @@
-cat models.json | jq '.data | sort_by(.created) | reverse | .[].name'
+cat models.json | jq -r '.data | sort_by(.created) | reverse | .[] | "\(.name): \(.description)"'
