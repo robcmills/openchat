@@ -1,8 +1,5 @@
 import { Message } from "./chat.ts";
-
-const OPENROUTER_API_KEY = Deno.env.get('OPENROUTER_API_KEY');
-
-const OPENROUTER_API_V1_CHAT_COMPLETIONS_URL = 'https://openrouter.ai/api/v1/chat/completions';
+import { OPENROUTER_API_KEY, OPENROUTER_API_V1_CHAT_COMPLETIONS_URL, OPENROUTER_API_V1_MODELS_URL } from "./constants.ts";
 
 export interface FetchCompletionArgs {
   messages: Message[];
@@ -34,7 +31,6 @@ export async function fetchCompletion({ messages, model }: FetchCompletionArgs) 
   }
 }
 
-const OPENROUTER_API_V1_MODELS_URL = 'https://openrouter.ai/api/v1/models';
 
 export async function getModels() {
   try {
