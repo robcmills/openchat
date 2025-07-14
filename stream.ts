@@ -12,7 +12,7 @@ async function stream() {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'openai/gpt-4o',
+      model: 'google/gemini-2.5-pro-preview',
       messages: [{ role: 'user', content: prompt }],
       stream: true,
     }),
@@ -25,13 +25,13 @@ async function stream() {
 
   const decoder = new TextDecoder();
   let buffer = '';
+  const chunks = [];
 
   try {
     while (true) {
       const { done, value } = await reader.read();
       if (done) break;
 
-      // Append new chunk to buffer
       buffer += decoder.decode(value, { stream: true });
 
       // Process complete lines from buffer
@@ -48,6 +48,7 @@ async function stream() {
 
           try {
             const parsed = JSON.parse(data);
+            chunks.push(parsed);
             const content = parsed.choices[0].delta.content;
             if (content) {
               console.log({ content });
@@ -61,6 +62,7 @@ async function stream() {
     }
   } finally {
     reader.cancel();
+    Deno.writeTextFileSync('stream.json', JSON.stringify(chunks, null, 2));
   }
 }
 
